@@ -10,18 +10,24 @@ class Solution(object):
         result = [0] * len(temperatures)
         stack = []  # indices of unresolved days (temperatures are decreasing)
 
-        for i, temp in enumerate(temperatures):
+        for idx, temp in enumerate(temperatures):
             # While current temp is warmer than the temp at stack's top index...
             while stack and temperatures[stack[-1]] < temp:
-                prev_idx = stack.pop()
-                result[prev_idx] = i - prev_idx  # days to wait = distance
-            stack.append(i)
+                prevIdx = stack.pop()
+                result[prevIdx] = idx - prevIdx  # days to wait = distance
+            stack.append(idx)
 
-        # Anything left in stack never found a warmer day → stays 0
+        # Anything left in stack never found a warmer day -> stays 0
         return result
 ```
 
-The initial "result" assumes
+The initial `result` assumes no day had a warmer day after it.
+
+The `stack` is our to-do list of day we still need to resolve. In each iteration of the `for` loop, we first try to resolve days on the stack. If the current day is warmer than the day at the top of the stack, the current day becomes the result of that previous day's next higher temperature (`i - prevIdx`). 
+
+We keep looping through the stack if there's any more days that are unresolved and lower than the current temperature.
+
+Then we add the current day to the stack to resolve it later.
 
 ## Initial attempts
 
